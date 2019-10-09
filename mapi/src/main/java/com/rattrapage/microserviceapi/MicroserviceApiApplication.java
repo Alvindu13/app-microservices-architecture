@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.stream.Stream;
 
 @SpringBootApplication
@@ -22,7 +23,7 @@ public class MicroserviceApiApplication {
     CommandLineRunner start(UserAppRepository userAppRepository){
 
         return args -> {
-            userAppRepository.save(new UserApp(1, "julien", "julien123", null, "julien@gmail.com"));
+            userAppRepository.save(new UserApp(1, "julien", "julien123", new Date(), "julien@gmail.com"));
             userAppRepository.save(new UserApp(2, "decrypt", "decrypt123", null, "decrypt@gmail.com"));
         };
     }
