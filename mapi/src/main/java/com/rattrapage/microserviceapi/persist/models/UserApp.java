@@ -1,4 +1,4 @@
-package com.rattrapage.microserviceapi.model;
+package com.rattrapage.microserviceapi.persist.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -28,6 +28,7 @@ public class UserApp {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date createdDate;
 
+    // TODO
     //cette resource n'est visible que si l'utilisateur connecté qui souhaite accéder à l'endpoint en est le propriétaire
     private String email;
 
