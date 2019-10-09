@@ -2,6 +2,7 @@ package com.rattrapage.microserviceapi;
 
 import com.rattrapage.microserviceapi.persist.models.UserApp;
 import com.rattrapage.microserviceapi.persist.repositories.UserAppRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,8 +24,13 @@ public class MicroserviceApiApplication {
     CommandLineRunner start(UserAppRepository userAppRepository){
 
         return args -> {
-            userAppRepository.save(new UserApp(1, "julien", "julien123", new Date(), "julien@gmail.com"));
-            userAppRepository.save(new UserApp(2, "decrypt", "decrypt123", null, "decrypt@gmail.com"));
+            userAppRepository.save(new UserApp(1, "julien", "julien123", new Date(), "julien@gmail.com", "1234"));
+            userAppRepository.save(new UserApp(2, "decrypt", "decrypt123", null, "decrypt@gmail.com", "1234"));
         };
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }

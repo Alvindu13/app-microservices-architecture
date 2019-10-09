@@ -1,4 +1,4 @@
-package com.rattrapage.microserviceapi.security;
+/*package com.rattrapage.microserviceapi.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,4 +16,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.headers().frameOptions().disable();
     }
-}
+}*/
