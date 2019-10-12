@@ -8,6 +8,7 @@ import com.rattrapage.microserviceapi.svc.contracts.FileAppService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,5 +31,11 @@ public class FileAppServiceImpl implements FileAppService {
         }
         userApp.getFileApps().add(fileApp);
         userAppRepository.save(userApp);
+    }
+
+    @Override
+    public List<FileApp> getAllFilesByUsersId(Integer userId) {
+
+        return fileRepository.findAllByUserAppId(userId);
     }
 }

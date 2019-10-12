@@ -54,7 +54,6 @@ public class UserController {
     //@PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/user/{id}")
     private ResponseEntity<UserAppDTO> update(@RequestBody UserAppDTO userAppDTO, @PathVariable Integer id) throws URISyntaxException, ParseException {
-        System.out.println(userAppDTO.toString());
         UserApp userApp = userAppMapper.toUserApp(userAppDTO);
         userApp.setId(id);
         userAppRepository.save(userApp);

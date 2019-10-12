@@ -38,10 +38,20 @@ public class MicroserviceApiApplication {
                             new FileInputStream(
                                     new File("README.md"))));
 
+            BufferedInputStream bis2 = new BufferedInputStream(
+                    new DataInputStream(
+                            new FileInputStream(
+                                    new File("README.md"))));
+
             FileApp newFileApp = new FileApp();
             newFileApp.setName("HK");
+            FileApp newFileApp2 = new FileApp();
+            newFileApp2.setName("HK2");
             fileContentStore.setContent(newFileApp, bis);
+            fileContentStore.setContent(newFileApp2, bis2);
             fileRepository.save(newFileApp);
+            fileRepository.save(newFileApp2);
+
 
             userAppRepository.save(new UserApp(
                     1,
