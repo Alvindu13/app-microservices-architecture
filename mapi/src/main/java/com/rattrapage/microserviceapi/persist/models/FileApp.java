@@ -1,4 +1,4 @@
-package com.rattrapage.microserviceapi.persist.repositories;
+package com.rattrapage.microserviceapi.persist.models;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,7 +16,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "file")
 public class FileApp {
 
 
@@ -43,4 +43,16 @@ public class FileApp {
     private String mimeType = "text/plain";
 
     private String path;
+
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn (name="userApp_id",referencedColumnName="id",nullable=true,unique=true)
+
+
+    @ManyToOne
+    @JoinColumn(name = "userApp_id")
+    @Nullable
+    private UserApp userApp;
+
 }
+
+
