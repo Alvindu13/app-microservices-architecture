@@ -1,22 +1,23 @@
 package com.rattrapage.microserviceapi.persist.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Data
+@Entity(name = "Files")
+@Table(name = "files")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileApp {
+public class Files {
 
 
     @Id
@@ -48,10 +49,29 @@ public class FileApp {
     //@JoinColumn (name="userApp_id",referencedColumnName="id",nullable=true,unique=true)
 
 
-    @ManyToOne
-    @JoinColumn(name = "userApp_id")
-    @Nullable
-    private UserApp userApp;
+    @ManyToOne(
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(name = "users_id")
+    @JsonBackReference
+    private Users users;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if (!(o instanceof Files))
+            return false;
+
+        return
+                id != null &&
+                        id.equals(((Files) o).getId());
+    }
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 }
 

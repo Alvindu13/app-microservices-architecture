@@ -1,7 +1,7 @@
 package com.rattrapage.microserviceapi.utils;
 
 import com.rattrapage.microserviceapi.DTO.UserAppDTO;
-import com.rattrapage.microserviceapi.persist.models.UserApp;
+import com.rattrapage.microserviceapi.persist.models.Users;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper
 public interface UserAppMapper {
 
-    UserAppDTO toUserAppDTO(UserApp userApp);
+    UserAppDTO toUserAppDTO(Users users);
 
-    List<UserAppDTO> toUserAppDTOs(List<UserApp> userApps);
+    List<UserAppDTO> toUserAppDTOs(List<Users> users);
 
-    UserApp toUserApp(UserAppDTO userAppDTO);
+    Users toUserApp(UserAppDTO userAppDTO);
 }

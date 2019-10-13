@@ -1,13 +1,12 @@
 package com.rattrapage.microserviceapi.svc.impl;
 
-import com.rattrapage.microserviceapi.persist.models.FileApp;
-import com.rattrapage.microserviceapi.persist.models.UserApp;
+import com.rattrapage.microserviceapi.persist.models.Files;
+import com.rattrapage.microserviceapi.persist.models.Users;
 import com.rattrapage.microserviceapi.persist.repositories.FileRepository;
 import com.rattrapage.microserviceapi.persist.repositories.UserAppRepository;
 import com.rattrapage.microserviceapi.svc.contracts.FileAppService;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,19 +22,19 @@ public class FileAppServiceImpl implements FileAppService {
     }
 
     @SuppressWarnings("Duplicates")
-    public void saveUserToFile(Integer userId, FileApp fileApp){
-        Optional<UserApp> userAppOptional = userAppRepository.findById(userId);
-        UserApp userApp = new UserApp();
+    public void saveUserToFile(Integer userId, Files files){
+        Optional<Users> userAppOptional = userAppRepository.findById(userId);
+        Users users = new Users();
         if(userAppOptional.isPresent()){
-            userApp = userAppOptional.get();
+            users = userAppOptional.get();
         }
-        userApp.getFileApps().add(fileApp);
-        userAppRepository.save(userApp);
+        users.getFiles().add(files);
+        userAppRepository.save(users);
     }
 
     @Override
-    public List<FileApp> getAllFilesByUsersId(Integer userId) {
+    public List<Files> getAllFilesByUsersId(Integer userId) {
 
-        return fileRepository.findAllByUserAppId(userId);
+        return fileRepository.findAllByUsersId(userId);
     }
 }

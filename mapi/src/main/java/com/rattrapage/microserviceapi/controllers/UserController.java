@@ -1,23 +1,17 @@
 package com.rattrapage.microserviceapi.controllers;
 
 import com.rattrapage.microserviceapi.DTO.UserAppDTO;
-import com.rattrapage.microserviceapi.persist.models.UserApp;
+import com.rattrapage.microserviceapi.persist.models.Users;
 import com.rattrapage.microserviceapi.persist.repositories.UserAppRepository;
 import com.rattrapage.microserviceapi.utils.UserAppMapper;
-import javafx.concurrent.Task;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
 //@RequiredArgsConstructor
 
 @RestController
@@ -32,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    private ResponseEntity<List<UserApp>> getAllUsers(){
-        return new ResponseEntity<List<UserApp>>(userAppRepository.findAll(), HttpStatus.OK);
+    private ResponseEntity<List<Users>> getAllUsers(){
+        return new ResponseEntity<List<Users>>(userAppRepository.findAll(), HttpStatus.OK);
     }
 
     /**
@@ -41,10 +35,10 @@ public class UserController {
      * @return
      */
     @PostMapping("/user")
-    private ResponseEntity<?> create(@RequestBody UserApp userApp) throws URISyntaxException {
+    private ResponseEntity<?> create(@RequestBody Users users) throws URISyntaxException {
             // save to database
-            UserApp newUserApp = userAppRepository.save(userApp);
-            return new ResponseEntity<>(newUserApp, HttpStatus.CREATED);
+            Users newUsers = userAppRepository.save(users);
+            return new ResponseEntity<>(newUsers, HttpStatus.CREATED);
     }
 
     /**
@@ -54,9 +48,9 @@ public class UserController {
     //@PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/user/{id}")
     private ResponseEntity<UserAppDTO> update(@RequestBody UserAppDTO userAppDTO, @PathVariable Integer id) throws URISyntaxException, ParseException {
-        UserApp userApp = userAppMapper.toUserApp(userAppDTO);
-        userApp.setId(id);
-        userAppRepository.save(userApp);
+        Users users = userAppMapper.toUserApp(userAppDTO);
+        users.setId(id);
+        userAppRepository.save(users);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userAppDTO);
     }
 
@@ -69,7 +63,7 @@ public class UserController {
     @DeleteMapping("/user/{id}")
     private ResponseEntity<?> delete(@PathVariable Integer id) throws URISyntaxException {
 
-        Optional<UserApp> userAppSaved = userAppRepository.findById(id);
+        Optional<Users> userAppSaved = userAppRepository.findById(id);
 
         if(userAppSaved.isPresent()){
             userAppRepository.deleteById(id);

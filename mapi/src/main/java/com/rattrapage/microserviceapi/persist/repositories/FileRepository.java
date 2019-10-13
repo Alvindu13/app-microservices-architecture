@@ -1,15 +1,15 @@
 package com.rattrapage.microserviceapi.persist.repositories;
 
-import com.rattrapage.microserviceapi.persist.models.FileApp;
+import com.rattrapage.microserviceapi.persist.models.Files;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 
-public interface FileRepository extends JpaRepository<FileApp, Integer> {
+public interface FileRepository extends JpaRepository<Files, Integer> {
 
-    FileApp findByName(String fileName);
+    Files findByName(String fileName);
 
-    List<FileApp> findAllByUserAppId(Integer userId);
+    List<Files> findAllByUsersId(Integer userId);
 
 }

@@ -1,6 +1,6 @@
 package com.rattrapage.microserviceapi.svc.contracts;
 
-import com.rattrapage.microserviceapi.persist.models.FileApp;
+import com.rattrapage.microserviceapi.persist.models.Files;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.List;
 @Service
 public interface FileAppService {
 
-    void saveUserToFile(Integer userId, FileApp newFileApp);
+    void saveUserToFile(Integer userId, Files newFiles);
 
-    List<FileApp> getAllFilesByUsersId(Integer userId);
+    List<Files> getAllFilesByUsersId(Integer userId);
 
 }

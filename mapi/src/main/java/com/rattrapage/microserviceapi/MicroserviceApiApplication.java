@@ -1,7 +1,7 @@
 package com.rattrapage.microserviceapi;
 
-import com.rattrapage.microserviceapi.persist.models.FileApp;
-import com.rattrapage.microserviceapi.persist.models.UserApp;
+import com.rattrapage.microserviceapi.persist.models.Files;
+import com.rattrapage.microserviceapi.persist.models.Users;
 import com.rattrapage.microserviceapi.persist.repositories.FileRepository;
 import com.rattrapage.microserviceapi.persist.repositories.UserAppRepository;
 import com.rattrapage.microserviceapi.utils.FileContentStore;
@@ -13,7 +13,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class MicroserviceApiApplication {
@@ -43,25 +45,31 @@ public class MicroserviceApiApplication {
                             new FileInputStream(
                                     new File("README.md"))));
 
-            FileApp newFileApp = new FileApp();
-            newFileApp.setName("HK");
-            FileApp newFileApp2 = new FileApp();
-            newFileApp2.setName("HK2");
-            fileContentStore.setContent(newFileApp, bis);
-            fileContentStore.setContent(newFileApp2, bis2);
-            fileRepository.save(newFileApp);
-            fileRepository.save(newFileApp2);
+
+            Users user = new Users();
+            user.setUsername("Roger");
+            user.setEmail("alvin");
+            user.setCreatedDate(new Date());
+            user.setPassword("1234");
+            user.setPseudo("joh");
+
+            Files newFiles = new Files();
+            newFiles.setName("HK");
+            Files newFiles2 = new Files();
+            newFiles2.setName("HK2");
+
+            fileContentStore.setContent(newFiles, bis);
+            fileContentStore.setContent(newFiles2, bis2);
 
 
-            userAppRepository.save(new UserApp(
-                    1,
-                    "julien",
-                    "julien123",
-                    new Date(),
-                    "julien@gmail.com",
-                    "1234",
-                    fileRepository.findAll()));
+            user.addFile(newFiles);
+            user.addFile(newFiles2);
+
+
+            userAppRepository.save(user);
         };
+
+
 
 
 

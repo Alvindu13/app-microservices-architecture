@@ -1,8 +1,8 @@
 package com.rattrapage.microserviceapi.controllers;
 
 
-import com.rattrapage.microserviceapi.persist.models.FileApp;
-import com.rattrapage.microserviceapi.persist.models.UserApp;
+import com.rattrapage.microserviceapi.persist.models.Files;
+import com.rattrapage.microserviceapi.persist.models.Users;
 import com.rattrapage.microserviceapi.persist.repositories.UserAppRepository;
 import com.rattrapage.microserviceapi.svc.contracts.FileAppService;
 import com.rattrapage.microserviceapi.utils.FileContentStore;
@@ -19,8 +19,6 @@ import java.util.logging.Logger;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @SuppressWarnings("Duplicates")
 @RestController
@@ -43,49 +41,41 @@ public class FileController {
     }
 
 
-
-    @RequestMapping(value="/files/{fileId}", method = RequestMethod.PUT)
-    public ResponseEntity<?> setContent(@PathVariable("fileId") Long id, @RequestParam("file") MultipartFile file)
-            throws IOException {
-        Optional<FileApp> f = filesRepo.findById(Math.toIntExact(id));
-        if (f.isPresent()) {
-            f.get().setMimeType(file.getContentType());
-            contentStore.setContent(f.get(), file.getInputStream());
-            // save updated content-related info
-            filesRepo.save(f.get());
-            return new ResponseEntity<Object>(HttpStatus.OK);
-        }
-        return new ResponseEntity<Object>(HttpStatus.CONFLICT);
-    }
-
-
     @PostMapping("/user/{id}/file")
     public ResponseEntity<?> createContent(@RequestParam("name") String name,
                                            @RequestParam("file") MultipartFile file,
-                                           @PathVariable Integer id)
-            throws IOException {
-        FileApp newFileApp = new FileApp();
-        newFileApp.setName(name);
-        newFileApp.setMimeType(file.getContentType());
-        contentStore.setContent(newFileApp, file.getInputStream());
-        fileAppService.saveUserToFile(id, newFileApp);
-        return new ResponseEntity<>(newFileApp, HttpStatus.CREATED);
+                                           @PathVariable Integer id) throws IOException {
+
+        Optional<Users> user = userAppRepository.findById(id);
+        Users userNewFile;
+        if(user.isPresent()){
+            Files newFiles = new Files();
+            contentStore.setContent(newFiles, file.getInputStream());
+            newFiles.setName(name);
+            newFiles.setMimeType(file.getContentType());
+            userNewFile = user.get();
+            userNewFile.addFile(newFiles);
+            userAppRepository.save(userNewFile);
+            return new ResponseEntity<>(newFiles, HttpStatus.CREATED);
+
+        }
+
+        //TODO gestion des erreurs
+        return null;
+        //fileAppService.saveUserToFile(id, newFiles);
     }
 
 
     @GetMapping("/user/{id}/file")
-    public ResponseEntity<List<FileApp>> getContents(@PathVariable Integer id)
+    public ResponseEntity<List<Files>> getContents(@PathVariable Integer id)
             throws IOException {
 
-        Optional<UserApp> userAppOptional = userAppRepository.findById(id);
-        List<FileApp> fileApps;
-
+        Optional<Users> userAppOptional = userAppRepository.findById(id);
+        List<Files> files;
         if(userAppOptional.isPresent()){
-
-            fileApps = new ArrayList<>(userAppOptional
-                    .get().getFileApps());
-
-            return new ResponseEntity<List<FileApp>>(fileApps, HttpStatus.CREATED);
+            files = new ArrayList<>(userAppOptional
+                    .get().getFiles());
+            return new ResponseEntity<List<Files>>(files, HttpStatus.CREATED);
 
         }
         return null;
@@ -98,16 +88,34 @@ public class FileController {
                                            @RequestParam("file") MultipartFile file,
                                            @PathVariable Integer id)
             throws IOException {
-        Optional<FileApp> pFileApp = filesRepo.findById(id);
-        FileApp updateFileApp;
+        Optional<Files> pFileApp = filesRepo.findById(id);
+        Files updateFiles;
 
         if(pFileApp.isPresent()){
-            updateFileApp = pFileApp.get();
-            updateFileApp.setName(name);
-            updateFileApp.setMimeType(file.getContentType());
-            contentStore.setContent(updateFileApp, file.getInputStream());
-            filesRepo.save(updateFileApp);
-            return new ResponseEntity<>(updateFileApp, HttpStatus.CREATED);
+            updateFiles = pFileApp.get();
+            updateFiles.setName(name);
+            updateFiles.setMimeType(file.getContentType());
+            contentStore.setContent(updateFiles, file.getInputStream());
+            filesRepo.save(updateFiles);
+            return new ResponseEntity<>(updateFiles, HttpStatus.CREATED);
+        }
+
+        //todo gestion des erreurs
+        return null;
+        //fileAppService.saveUserToFile(id, updateFiles);
+    }
+
+
+    @DeleteMapping("/file/{id}")
+    public ResponseEntity<?> deleteContent(@PathVariable Integer id) throws IOException {
+        Optional<Files> pFileApp = filesRepo.findById(id);
+        Files deleteFile;
+        if(pFileApp.isPresent()){
+            deleteFile = pFileApp.get();
+            filesRepo.delete(deleteFile);
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body("Le fichier " + id + "a bien été supprimé");
         }
 
         //todo gestion des erreurs
