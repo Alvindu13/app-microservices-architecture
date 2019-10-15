@@ -1,6 +1,8 @@
 package com.rattrapage.microserviceapi.controllers;
 
 
+import com.rattrapage.microserviceapi.exceptions.FileAppNotFoundException;
+import com.rattrapage.microserviceapi.exceptions.UserNotFoundException;
 import com.rattrapage.microserviceapi.persist.models.Files;
 import com.rattrapage.microserviceapi.persist.models.Users;
 import com.rattrapage.microserviceapi.persist.repositories.UserAppRepository;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -45,7 +48,6 @@ public class FileController {
     public ResponseEntity<?> createContent(@RequestParam("name") String name,
                                            @RequestParam("file") MultipartFile file,
                                            @PathVariable Integer id) throws IOException {
-
         Optional<Users> user = userAppRepository.findById(id);
         Users userNewFile;
         if(user.isPresent()){
@@ -57,29 +59,21 @@ public class FileController {
             userNewFile.addFile(newFiles);
             userAppRepository.save(userNewFile);
             return new ResponseEntity<>(newFiles, HttpStatus.CREATED);
-
-        }
-
-        //TODO gestion des erreurs
-        return null;
-        //fileAppService.saveUserToFile(id, newFiles);
+        } throw new UserNotFoundException("l'user avec l'id : " + id + "n'existe pas");
     }
 
 
     @GetMapping("/user/{id}/file")
     public ResponseEntity<List<Files>> getContents(@PathVariable Integer id)
             throws IOException {
-
         Optional<Users> userAppOptional = userAppRepository.findById(id);
         List<Files> files;
         if(userAppOptional.isPresent()){
             files = new ArrayList<>(userAppOptional
                     .get().getFiles());
-            return new ResponseEntity<List<Files>>(files, HttpStatus.CREATED);
-
-        }
-        return null;
-
+            if (files.isEmpty()) throw new FileAppNotFoundException("l'user avec l'id : " + id + " ne possède aucun fichier");
+            return new ResponseEntity<>(files, HttpStatus.CREATED);
+        } throw new UserNotFoundException("l'user avec l'id : " + id + "n'existe pas");
     }
 
 
@@ -90,7 +84,6 @@ public class FileController {
             throws IOException {
         Optional<Files> pFileApp = filesRepo.findById(id);
         Files updateFiles;
-
         if(pFileApp.isPresent()){
             updateFiles = pFileApp.get();
             updateFiles.setName(name);
@@ -98,11 +91,7 @@ public class FileController {
             contentStore.setContent(updateFiles, file.getInputStream());
             filesRepo.save(updateFiles);
             return new ResponseEntity<>(updateFiles, HttpStatus.CREATED);
-        }
-
-        //todo gestion des erreurs
-        return null;
-        //fileAppService.saveUserToFile(id, updateFiles);
+        } throw new FileAppNotFoundException("le fichier avec l'id " + id + " n'existe pas");
     }
 
 
@@ -113,15 +102,7 @@ public class FileController {
         if(pFileApp.isPresent()){
             deleteFile = pFileApp.get();
             filesRepo.delete(deleteFile);
-            return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body("Le fichier " + id + "a bien été supprimé");
-        }
-
-        //todo gestion des erreurs
-        return null;
-        //fileAppService.saveUserToFile(id, updateFileApp);
+            return new ResponseEntity<>( "Le fichier avec l'id " + id + " a bien été supprimé", HttpStatus.NO_CONTENT);
+        } throw new FileAppNotFoundException("le fichier avec l'id " + id + " n'existe pas");
     }
-
-
 }

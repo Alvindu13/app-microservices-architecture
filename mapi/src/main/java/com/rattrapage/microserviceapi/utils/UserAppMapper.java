@@ -1,6 +1,6 @@
 package com.rattrapage.microserviceapi.utils;
 
-import com.rattrapage.microserviceapi.DTO.UserAppDTO;
+import com.rattrapage.microserviceapi.persist.DTO.UserAppDTO;
 import com.rattrapage.microserviceapi.persist.models.Users;
 import org.mapstruct.Mapper;
 

@@ -45,9 +45,6 @@ public class Files {
 
     private String path;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn (name="userApp_id",referencedColumnName="id",nullable=true,unique=true)
-
 
     @ManyToOne(
             fetch = FetchType.LAZY

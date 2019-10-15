@@ -8,6 +8,8 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +30,7 @@ public class Users {
 
     private String username;
 
+    @Column(length = 16, nullable = false, unique = true)
     private String pseudo;
 
     //On respecte le format attendu
@@ -36,15 +39,12 @@ public class Users {
     private Date createdDate;
 
     // TODO
+    @Email
     //cette resource n'est visible que si l'utilisateur connecté qui souhaite accéder à l'endpoint en est le propriétaire
     private String email;
 
     @JsonIgnore
     private String password;
-
-    //@OneToMany(mappedBy = "id", targetEntity = Files.class)
-    //@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //@ManyToMany(cascade = CascadeType.ALL)
 
     @OneToMany(
             mappedBy = "users",
