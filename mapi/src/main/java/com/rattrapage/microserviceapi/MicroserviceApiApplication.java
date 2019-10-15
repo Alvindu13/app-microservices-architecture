@@ -1,5 +1,6 @@
 package com.rattrapage.microserviceapi;
 
+import com.rattrapage.microserviceapi.notifications.MessageSource;
 import com.rattrapage.microserviceapi.persist.models.Files;
 import com.rattrapage.microserviceapi.persist.models.Users;
 import com.rattrapage.microserviceapi.persist.repositories.FileRepository;
@@ -10,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.context.annotation.Bean;
 
 import java.io.*;
@@ -48,7 +52,7 @@ public class MicroserviceApiApplication {
 
             Users user = new Users();
             user.setUsername("Roger");
-            user.setEmail("alvin");
+            user.setEmail("alvin@hotmail.fr");
             user.setCreatedDate(new Date());
             user.setPassword("1234");
             user.setPseudo("joh");
@@ -68,14 +72,8 @@ public class MicroserviceApiApplication {
 
             userAppRepository.save(user);
         };
-
-
-
-
-
-
-
     }
+
 
     @Bean
     public ModelMapper modelMapper() {
