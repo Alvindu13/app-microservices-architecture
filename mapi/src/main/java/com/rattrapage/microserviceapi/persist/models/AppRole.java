@@ -31,10 +31,4 @@ public class AppRole {
     private Long id;
     private String roleName;
 
-    /*@ManyToOne(
-            fetch = FetchType.LAZY
-    )
-    @JoinColumn(name = "users_id")
-    @JsonBackReference
-    private Users users;*/
 }

@@ -16,10 +16,6 @@ import java.util.Date;
 public class MicroserviceBackupApplication {
 
 
-
-
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(MicroserviceBackupApplication.class, args);
 	}

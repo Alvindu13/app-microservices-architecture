@@ -59,10 +59,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();//obligatoire pour jwt token car empêche les requêtes en post etc
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //on utilise plus les sessions de spring (sessions de l'user en mémoire)
         http.authorizeRequests().antMatchers("/login/**", "/register/**").permitAll();
+        //affiche la console h2
         http.headers().frameOptions().disable();
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/h2_console/**").permitAll();
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter( authenticationManager()));
         http.addFilterBefore(new JWTAuthorizationFilter(),UsernamePasswordAuthenticationFilter.class);

@@ -72,11 +72,10 @@ public class FileController {
             userNewFile = user.get();
             userNewFile.addFile(newFiles);
             userAppRepository.save(userNewFile);
-            //Génère une message et le dispatch a l'ensemble des services
+            //RABBITMQ Génère un message et le dispatch a l'ensemble des services
             Message message = new Message("FILE_CREATE: Le fichier " + file.getOriginalFilename() + " a été créé");
             source.output().send(MessageBuilder.withPayload(message).build());
             source.output().send(MessageBuilder.withPayload(newFiles).build());
-            System.out.println(message.getMessage());
 
             return new ResponseEntity<>(newFiles, HttpStatus.CREATED);
         } throw new UserNotFoundException("l'user avec l'id : " + id + "n'existe pas");
