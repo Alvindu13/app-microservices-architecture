@@ -1,4 +1,4 @@
-package com.microservice.mnotifs;
+package com.rattrapage.microservicebackup.microservicebackup;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MnotifsApplicationTests {
+public class MicroserviceBackupApplicationTests {
 
 	@Test
 	public void contextLoads() {

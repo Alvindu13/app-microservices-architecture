@@ -29,7 +29,6 @@ public class Files {
     private String summary;
 
     //On respecte le format attendu
-    //@JsonFormat(pattern="yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date createdDate;
 
