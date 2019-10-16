@@ -6,6 +6,8 @@ import com.rattrapage.microserviceapi.persist.DTO.UserAppDTO;
 import com.rattrapage.microserviceapi.persist.models.Users;
 import com.rattrapage.microserviceapi.persist.repositories.UserAppRepository;
 import com.rattrapage.microserviceapi.utils.UserAppMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@Api(value = "Handle Users")
 public class UserController {
 
     private UserAppRepository userAppRepository;
@@ -28,6 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @ApiOperation(value = "Find all users")
     private ResponseEntity<List<Users>> getAllUsers(){
         List<Users> users = new ArrayList<>();
         users = userAppRepository.findAll();
@@ -41,6 +45,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/user")
+    @ApiOperation(value = "Create one user")
     private ResponseEntity<?> create(@RequestBody Users users) throws URISyntaxException {
         //TODO vérifier que le password de l'user respecte bien le bon format attendu [a-zA-Z0-9_-]
         // De même pour email
@@ -57,6 +62,7 @@ public class UserController {
      * @return
      */
     //@PreAuthorize("hasAuthority('ADMIN')")
+    @ApiOperation(value = "Modif one user")
     @PutMapping("/user/{id}")
     private ResponseEntity<UserAppDTO> update(@RequestBody UserAppDTO userAppDTO, @PathVariable Integer id) throws URISyntaxException, ParseException {
         Optional<Users> pUser = userAppRepository.findById(id);
@@ -74,6 +80,7 @@ public class UserController {
      * @return
      */
     //@PreAuthorize("hasAuthority('ADMIN')")
+    @ApiOperation(value = "Delete one user")
     @DeleteMapping("/user/{id}")
     private ResponseEntity<?> delete(@PathVariable Integer id) throws URISyntaxException {
         Optional<Users> userAppSaved = userAppRepository.findById(id);

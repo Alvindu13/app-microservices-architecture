@@ -11,6 +11,8 @@ import com.rattrapage.microserviceapi.persist.models.Users;
 import com.rattrapage.microserviceapi.persist.repositories.UserAppRepository;
 import com.rattrapage.microserviceapi.utils.FileContentStore;
 import com.rattrapage.microserviceapi.persist.repositories.FileRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @SuppressWarnings("Duplicates")
+@Api(value = "Handle files")
 @RestController
 @EnableBinding({MessageSource.class, Source.class})
 public class FileController {
@@ -40,7 +43,6 @@ public class FileController {
     private FileRepository filesRepo;
     private FileContentStore contentStore;
     private UserAppRepository userAppRepository;
-    //private FileAppService fileAppService;
     private Source source;
     private FileStorageService fileStorageService;
 
@@ -56,6 +58,7 @@ public class FileController {
     }
 
     @PostMapping("/user/{id}/file")
+    @ApiOperation(value = "Create one file")
     public ResponseEntity<?> createContent(@RequestParam("name") String name,
                                            @RequestParam("file") MultipartFile file,
                                            @PathVariable Integer id) throws IOException {
@@ -69,7 +72,6 @@ public class FileController {
             userNewFile = user.get();
             userNewFile.addFile(newFiles);
             userAppRepository.save(userNewFile);
-
             //Génère une message et le dispatch a l'ensemble des services
             Message message = new Message("FILE_CREATE: Le fichier " + file.getOriginalFilename() + " a été créé");
             source.output().send(MessageBuilder.withPayload(message).build());
@@ -82,6 +84,7 @@ public class FileController {
 
 
     @GetMapping("/user/{id}/file")
+    @ApiOperation(value = "Get all files")
     public ResponseEntity<List<Files>> getContents(@PathVariable Integer id)
             throws IOException {
         Optional<Users> userAppOptional = userAppRepository.findById(id);
@@ -96,6 +99,7 @@ public class FileController {
 
 
     @PutMapping("/file/{id}")
+    @ApiOperation(value = "update one file")
     public ResponseEntity<?> updateContent(@RequestParam("name") String name,
                                            @RequestParam("file") MultipartFile file,
                                            @PathVariable Integer id)
@@ -123,6 +127,7 @@ public class FileController {
 
 
     @DeleteMapping("/file/{id}")
+    @ApiOperation(value = "Delete one file")
     public ResponseEntity<?> deleteContent(@PathVariable Integer id) throws IOException {
         Optional<Files> pFileApp = filesRepo.findById(id);
         Files deleteFile;

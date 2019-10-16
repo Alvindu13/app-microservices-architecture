@@ -1,6 +1,5 @@
 package com.rattrapage.microservicebackup.microservicebackup;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
@@ -10,10 +9,6 @@ import org.springframework.content.commons.annotations.ContentId;
 import org.springframework.content.commons.annotations.ContentLength;
 
 import java.io.*;
-import java.nio.channels.Channel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 
 @EnableBinding(Sink.class)
@@ -62,7 +57,7 @@ public class MicroserviceBackupApplication {
 				br.close();
 				String str1 = sb.toString();
 				createBackup("backup_files/" + file.getName() + " - backup" + typeFile, str1);
-				System.out.println(str1);
+				//System.out.println(str1);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
